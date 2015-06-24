@@ -11,6 +11,10 @@ You also have to install the ``rtext`` Ruby gem:
 
     > gem install rtext
 
+If you don't have the latest version, you might have problems. So in this case just update:
+
+    > gem update rtext
+
 ##Installation
 
 Make sure the ``syntax`` folder will be found by your VIM installation. Either copy it directly or use [pathogen](https://github.com/tpope/vim-pathogen) or [vundle](https://github.com/gmarik/vundle).

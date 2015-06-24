@@ -94,8 +94,8 @@ map <buffer> <silent> <C-LeftMouse> :call <SID>JumpReference()<CR>
 
 au BufWritePost <buffer> call <SID>ShowProblems()
 au CursorHold <buffer> call <SID>Timeout() 
-au CursorMoved <buffer> call <SID>Trigger() 
-au CursorMovedI <buffer> call <SID>Trigger() 
+" au CursorMoved <buffer> call <SID>Trigger() 
+" au CursorMovedI <buffer> call <SID>Trigger() 
 
 if exists('g:loaded_rtext')
   finish
@@ -161,10 +161,11 @@ module RText
     lp = line_prefix
     con = $man.connector_for_file(VIM::evaluate('expand("%:p")'))
     if con
+      ctx, col = RText::Frontend::Context.new.extract(buf_prefix, lp.size)
       response = con.execute_command(
         {"command" => "content_complete", 
-         "column" => lp.size+1,
-         "context" =>  RText::Frontend::Context.extract(buf_prefix)})
+         "column" => col + 1,
+         "context" =>  ctx})
       options = []
       if error_message(response)
       elsif response["type"] == "response"
@@ -196,10 +197,11 @@ module RText
     lp = line_prefix
     con = $man.connector_for_file(VIM::evaluate('expand("%:p")'))
     if con
+      ctx, col = RText::Frontend::Context.new.extract(buf_prefix, lp.size)
       response = con.execute_command({
         "command" => "link_targets", 
-        "column" => lp.size + 1,
-        "context" => RText::Frontend::Context.extract(buf_prefix)})
+        "column" => col + 1,
+        "context" => ctx})
       if error_message(response)
       elsif response["type"] == "response"
         targets = response["targets"] || []
